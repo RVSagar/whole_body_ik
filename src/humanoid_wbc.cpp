@@ -28,6 +28,7 @@ humanoid_wbc::humanoid_wbc(ros::NodeHandle nh_)
     pin = new pin_wrapper(modelname, true);
     desired_pin = new pin_wrapper(modelname, true);
     cmd_pub = nh.advertise<sensor_msgs::JointState>(joint_cmd_topic, 1000);
+    joint_command_pub = nh.advertise<reemc_direct_position_control::JointPositionCommand>("/reemc_direct_position_control/command", 1000);
     q.resize(ndof);
     dq.resize(ndof);
     jointNominalConfig.resize(ndof+7);
@@ -487,6 +488,14 @@ void humanoid_wbc::controlCb(Eigen::VectorXd &qd, Eigen::VectorXd& dqd, const wh
     joint_msg.name = msg.joint_state.name;
     joint_msg.header.stamp = ros::Time::now();
     cmd_pub.publish(joint_msg);
+    
+    reemc_direct_position_control::JointPositionCommand joint_position_command_msg;
+    joint_position_command_msg.names = joint_states_list;
+
+    std::vector<double> no_fb_qfoo(qfoo.begin() + 7, qfoo.end());
+    joint_position_command_msg.positions = no_fb_qfoo;
+    
+    joint_command_pub.publish(joint_position_command_msg);
     // feedback_.percent_completed = 100;
     // as_->publishFeedback(feedback_);
     // result_.status = 1;

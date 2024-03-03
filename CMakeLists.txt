@@ -9,6 +9,7 @@ find_package(catkin REQUIRED COMPONENTS
   sensor_msgs
   actionlib
   whole_body_ik_msgs
+  reemc_direct_position_control
 )
 find_package(Boost REQUIRED COMPONENTS system)
 
@@ -22,7 +23,7 @@ pkg_check_modules(PINOCCHIO pinocchio REQUIRED)
 catkin_package(
   INCLUDE_DIRS include
   LIBRARIES whole_body_ik
-  CATKIN_DEPENDS roscpp sensor_msgs actionlib whole_body_ik_msgs 
+  CATKIN_DEPENDS roscpp sensor_msgs actionlib whole_body_ik_msgs reemc_direct_position_control
   DEPENDS EIGEN3 PINOCCHIO qpmad
 )
 

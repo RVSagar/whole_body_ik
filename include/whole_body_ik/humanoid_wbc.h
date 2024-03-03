@@ -4,6 +4,7 @@
 #include <iostream>
 #include <ros/ros.h>
 #include <sensor_msgs/JointState.h>
+#include <reemc_direct_position_control/JointPositionCommand.h>
 #include <nav_msgs/Odometry.h>
 #include <whole_body_ik_msgs/HumanoidAction.h>
 #include <eigen3/Eigen/Dense>
@@ -24,6 +25,7 @@ private:
     ros::Subscriber joint_state_sub, odom_sub;
     std::string modelname, base_link_frame, lfoot_frame, rfoot_frame, lhand_frame, rhand_frame, head_frame, joint_cmd_topic;
     ros::Publisher cmd_pub;
+    ros::Publisher joint_command_pub;
     whole_body_ik_msgs::HumanoidResult result_;
     whole_body_ik_msgs::HumanoidFeedback feedback_;
     std::vector<linearTask> ltaskVec;
@@ -54,6 +56,15 @@ public:
     pin_wrapper  *desired_pin;
     Eigen::VectorXd jointNominalConfig, jointNominalVelocity;
     actionlib::SimpleActionServer<whole_body_ik_msgs::HumanoidAction> *as_; 
+
+    std::vector<std::string> joint_states_list = {
+    "arm_left_1_joint", "arm_left_2_joint", "arm_left_3_joint", "arm_left_4_joint", "arm_left_5_joint", "arm_left_6_joint", "arm_left_7_joint",
+    "arm_right_1_joint", "arm_right_2_joint", "arm_right_3_joint", "arm_right_4_joint", "arm_right_5_joint", "arm_right_6_joint", "arm_right_7_joint",
+    "head_1_joint", "head_2_joint",
+    "leg_left_1_joint", "leg_left_2_joint", "leg_left_3_joint", "leg_left_4_joint", "leg_left_5_joint", "leg_left_6_joint",
+    "leg_right_1_joint", "leg_right_2_joint", "leg_right_3_joint", "leg_right_4_joint", "leg_right_5_joint", "leg_right_6_joint",
+    "torso_1_joint","torso_2_joint"};
+
 void swapQuatWXYZ(Eigen::VectorXd &input_)
 {
   Eigen::VectorXd tmp(input_.size());

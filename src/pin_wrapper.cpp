@@ -855,6 +855,6 @@ Eigen::VectorXd pin_wrapper::inverseKinematics(std::vector<linearTask> ltask, st
     //qpmad::Solver::ReturnStatus status = solver.solve(qdotd, L_choleksy, h, lb, ub, A, Alb, Aub, solver_params);
     //qmap form 1/2* x' H x + h' x
     qpmad::Solver::ReturnStatus status = solver.solve(qdotd, H, h, lb, ub);
-    qd = pinocchio::integrate(*pmodel_, q_, qdotd * dt);
+    qd = pinocchio::integrate(*pmodel_, qd, qdotd * dt);
     return qdotd;
 }
